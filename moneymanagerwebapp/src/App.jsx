@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Income from "./pages/Income.jsx";
 import Expense from "./pages/Expense.jsx";
@@ -15,6 +15,7 @@ const App = () => {
           <Toaster />
             <BrowserRouter>
               <Routes>
+                <Route path="/" element={<Route/>}/>
                 <Route path="/dashboard" element={<Home/>}/>
                 <Route path="/income" element={<Income/>}/>
                 <Route path="/expense" element={<Expense/>}/>
@@ -26,6 +27,15 @@ const App = () => {
             </BrowserRouter>
         </>
     )
+}
+
+const Root = () =>{
+  const isAuthenticated = !!localStorage.getItem("token");
+  return isAuthenticated ? (
+      <Navigate to="/dashboard"/>
+  ) : (
+      <Navigate to="/login"/>
+  )
 }
 
 export default App;
