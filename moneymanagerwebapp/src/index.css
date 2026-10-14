@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
@@ -5,12 +6,39 @@ body {
   font-family: 'Be Vietnam Pro', sans-serif;
   background-color: #fcfbfc;
   overflow-x: hidden;
-}
-.card {
-  @apply bg-white rounded-2xl shadow-md border border-gray-100;
+  font-size: 14px;
 }
 
+/* Labels */
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-1.5;
+}
+
+/* Inputs */
+.form-input {
+  @apply w-full text-sm font-medium text-gray-800;
+}
+
+/* Card */
+.card {
+  @apply bg-white p-6 rounded-2xl shadow-md border border-gray-100;
+}
+
+/* Buttons */
 .add-btn {
   @apply bg-green-50 text-green-700 px-4 py-2 rounded-lg
   hover:bg-green-100 transition-colors cursor-pointer;
 }
+
+.card-btn {
+  @apply flex items-center justify-center gap-2
+  px-5 py-2.5 bg-gray-50 border border-gray-200
+  rounded-lg text-sm font-medium text-gray-700
+  hover:bg-gray-100 transition-colors duration-200
+  cursor-pointer;
+}
+
+.add-btn-fill{
+  @apply bg-purple-700 hover:bg-purple-800 text-white font-semibold px-5 py-3 rounded-lg shadow-sm transition-colors cursor-pointer
+}
+

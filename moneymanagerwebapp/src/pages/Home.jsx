@@ -7,6 +7,7 @@ const Home = () => {
         <div>
             <Dashboard activeMenu="Dashboard">
                 This is Home page
+
             </Dashboard>
         </div>
     )

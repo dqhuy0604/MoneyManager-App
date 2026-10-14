@@ -39,7 +39,78 @@ const Category = () => {
 
     useEffect(() => {
         fetchCategoryDetails();
-    },[])
+    },[]);
+
+    const handleAddCategory = async (category) =>{
+        const {name, type, icon} = category;
+
+        if(!name.trim()){
+            toast.error("Vui lòng nhập tên danh mục")
+            return;
+        }
+        //check if the category already exists
+        const isDuplicate = categoryData.some((category) =>{
+            return category.name.toLowerCase() === name.trim().toLowerCase();
+        })
+
+        if(isDuplicate){
+            toast.error("Danh mục này đã tồn tại");
+            return;
+        }
+
+
+        try{
+            const response = await axiosConfig.post(API_ENDPOINT.ADD_CATEGORY, {name, type, icon});
+            if(response.status === 201){
+                toast.success("Thêm danh mục thành công");
+                setOpenAddCategoryModal(false);
+                fetchCategoryDetails();
+            }
+        }catch (error){
+            console.log('Lỗi thêm danh mục', error);
+            toast.error(error.response?.data?.message || "Thêm danh mục thất bại.");
+        }
+    }
+
+    const handleEditCategory = (categoryToedit) =>{
+        setSelectedCategory(categoryToedit);
+        setOpenEditCategoryModal(true);
+    }
+    const handleUpdateCategory = async (updateCategory) => {
+        const{id, name, type, icon} = updateCategory;
+        if(!name.trim()){
+            toast.error("Danh mục này đã tồn tại");
+            return
+        }
+
+        if(!id){
+            toast.error("ID Danh mục không hợp lệ");
+            return;
+        }
+        const isDuplicate = categoryData.some((updateCategory) =>{
+            return (
+                String(updateCategory.id) !== String(id) &&
+                updateCategory.name.trim().toLowerCase() === name.trim().toLowerCase()
+            );
+        })
+
+        if(isDuplicate){
+            toast.error("Tên daanh mục này đã tồn tại");
+            return;
+        }
+
+        try{
+            console.log("Update category:", updateCategory);
+            const response = await axiosConfig.put(API_ENDPOINT.UPDATE_CATEGORY(id),{name, type, icon});
+            setOpenEditCategoryModal(false);
+            setSelectedCategory(null);
+            toast.success("Cập nhật danh mục thành công");
+            fetchCategoryDetails();
+        }catch (error){
+            console.error("Lỗi cập nhật danh mục", error.response?.data?.message || error.message);
+            toast.error(error.response?.data?.message || "Cập nhật danh mục thật bại.")
+        }
+    }
 
 
     return (
@@ -56,7 +127,7 @@ const Category = () => {
                     </button>
                 </div>
                 {/* Category List*/}
-                <CategoryList categories={categoryData}/>
+                <CategoryList categories={categoryData} onEditCategory={handleEditCategory}/>
 
                 {/* Adding category modal*/}
                 <Modal
@@ -64,7 +135,22 @@ const Category = () => {
                     onClose={() => setOpenAddCategoryModal(false)}
                     title="Thêm Danh Mục"
                 >
-                    <AddCategoryForm/>
+                    <AddCategoryForm onAddCategory={handleAddCategory}/>
+                </Modal>
+                <Modal
+                    onClose={() =>{
+                        setOpenEditCategoryModal(false)
+                        setSelectedCategory(null);
+                }}
+                    isOpen={openEditCategoryModal}
+                    title="Cập Nhật"
+                >
+                    <AddCategoryForm
+                        initialCategoryData={selectedCategory}
+                        onAddCategory={handleUpdateCategory}
+                        isEditing={true}
+                    />
+
                 </Modal>
             </div>
         </Dashboard>

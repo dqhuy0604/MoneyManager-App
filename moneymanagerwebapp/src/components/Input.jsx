@@ -19,11 +19,11 @@ const Input = ({label, value, onChange, placeholder, type, isSelect, options}) =
                         value={value}
                         onChange={(e) => onChange(e)}
                     >
-                        {options.map((option) =>{
+                        {options.map((option) =>(
                             <option key={option.value} value={option.value}>
                                 {option.label}
                             </option>
-                        })}
+                        ))}
 
                     </select>
                 ) : (
