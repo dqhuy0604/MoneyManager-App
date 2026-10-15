@@ -35,7 +35,7 @@ public class FilterController{
         if("income".equals(filter.getType())){
             List<IncomeDTO> incomes = incomeService.filterIncome(startDate, endDate, keyword, sort);
             return ResponseEntity.ok(incomes);
-        } else if("expnse".equalsIgnoreCase(filter.getType())){
+        } else if("expense".equalsIgnoreCase(filter.getType())){
             List<ExpenseDTO> expenses = expenseService.filterExpense(startDate, endDate, keyword, sort);
             return ResponseEntity.ok(expenses);
         }else{

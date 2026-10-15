@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.Map;
 
 @RestController
@@ -26,7 +27,7 @@ public class ProfileController {
     public ResponseEntity<String> activateProfile(@RequestParam String token) {
         boolean isActivated = profileService.activateProfile(token);
         if (isActivated) {
-            return ResponseEntity.ok("Profile activated successfully.");
+            return ResponseEntity.ok("Tài khoản kích hoạt thành công");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activation token not found or already used.");
         }
@@ -37,7 +38,7 @@ public class ProfileController {
         try {
             if (!profileService.isAccountActive(authDTO.getEmail())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
-                        "message", "Account is not activated. Please check your email for the activation link."
+                        "message", "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra Email để kích hoạt."
                 ));
             }
             Map<String, Object> response = profileService.authenticateAndGenerateToken(authDTO);
@@ -47,6 +48,12 @@ public class ProfileController {
                     "message", e.getMessage()
             ));
         }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileDTO> getPublicProfile(){
+        ProfileDTO profileDTO = profileService.getPublicProfile(null);
+        return ResponseEntity.ok(profileDTO);
     }
 
 }

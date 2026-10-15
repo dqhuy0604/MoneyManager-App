@@ -38,9 +38,9 @@ public class ProfileService {
         newProfile = profileRepository.save(newProfile);
         //send activation email
         String activationLink = activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
-        String subject = "Activate your Money Manager account";
-        String body = "Click on the following link to activate your account: " + activationLink;
-//        emailService.sendEmail(newProfile.getEmail(), subject, body);
+        String subject = "Kích Hoạt Tài Khoản cho app Money Mananger";
+        String body = "Vui lòng nhấn vào link sau để kích hoạt tài khoản " + activationLink;
+        emailService.sendEmail(newProfile.getEmail(), subject, body);
         return toDTO(newProfile);
 
     }
@@ -87,7 +87,7 @@ public class ProfileService {
     public ProfileEntity getCurrentProfile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return profileRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + authentication.getName()));
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản: " + authentication.getName()));
     }
 
     public ProfileDTO getPublicProfile(String email){
@@ -96,7 +96,7 @@ public class ProfileService {
             currentUser = getCurrentProfile();
         }else {
             currentUser = profileRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + email));
+                    .orElseThrow(() -> new UsernameNotFoundException("PKhông tìm thấy tài khoản: " + email));
         }
         return ProfileDTO.builder()
                 .id(currentUser.getId())

@@ -47,6 +47,7 @@ public class CategoryService {
         CategoryEntity existingCategory = categoryRepository.findByIdAndProfileId(categoryId, profile.getId())
                 .orElseThrow(() -> new RuntimeException("Category not found or not accessible"));
 
+        existingCategory.setType(categoryDTO.getType());
         existingCategory.setName(categoryDTO.getName());
         existingCategory.setIcon(categoryDTO.getIcon());
         existingCategory = categoryRepository.save(existingCategory);
