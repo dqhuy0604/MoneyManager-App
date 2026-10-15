@@ -122,7 +122,7 @@ public class ProfileService {
                     "user", getPublicProfile(authDTO.getEmail())
             );
         } catch (Exception e) {
-            throw new RuntimeException("Invalid email or password");
+            throw new RuntimeException("Email hoặc mật khẩu chưa đúng");
         }
     }
 }
