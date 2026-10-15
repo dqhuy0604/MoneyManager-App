@@ -36,6 +36,7 @@ public class ProfileService {
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile.setPassword(passwordEncoder.encode(newProfile.getPassword()));
         newProfile = profileRepository.save(newProfile);
+
         //send activation email
         String activationLink = activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
         String subject = "Kích Hoạt Tài Khoản cho app Money Mananger";
@@ -96,7 +97,7 @@ public class ProfileService {
             currentUser = getCurrentProfile();
         }else {
             currentUser = profileRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("PKhông tìm thấy tài khoản: " + email));
+                    .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản: " + email));
         }
         return ProfileDTO.builder()
                 .id(currentUser.getId())

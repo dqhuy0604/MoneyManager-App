@@ -1,44 +1,104 @@
+
 package com.example.moneymanager.service;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+
+import java.time.Duration;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class EmailService {
-    private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.properties.mail.smtp.from}")
-    private String fromEmail;
+    private final RestClient restClient;
+    private final String apiKey;
+    private final String fromEmail;
 
-    public void sendEmail(String to, String subject, String body) {
-        try{
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromEmail);
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(body);
-            mailSender.send(message);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public EmailService(
+            @Value("${brevo.api.key}") String apiKey,
+            @Value("${brevo.from.email}") String fromEmail
+    ) {
+        this.apiKey = apiKey;
+        this.fromEmail = fromEmail;
+
+        SimpleClientHttpRequestFactory factory =
+                new SimpleClientHttpRequestFactory();
+
+        factory.setConnectTimeout(Duration.ofSeconds(10));
+        factory.setReadTimeout(Duration.ofSeconds(30));
+
+        this.restClient = RestClient.builder()
+                .baseUrl("https://api.brevo.com/v3")
+                .requestFactory(factory)
+                .build();
     }
-    public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachment, String filename) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(fromEmail);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(body);
-        helper.addAttachment(filename, new ByteArrayResource(attachment));
-        mailSender.send(message);
 
+    // 1. Gửi email văn bản
+    public void sendEmail(String to, String subject, String body) {
+
+        Map<String, Object> requestBody = Map.of(
+                "sender", Map.of(
+                        "name", "Money Manager",
+                        "email", fromEmail
+                ),
+                "to", List.of(Map.of("email", to)),
+                "subject", subject,
+                "textContent", body
+        );
+
+        sendRequest(requestBody);
+    }
+
+    // 2. Gửi email có file đính kèm
+    public void sendEmailWithAttachment(
+            String to,
+            String subject,
+            String body,
+            byte[] attachment,
+            String filename
+    ) throws MessagingException {
+
+        if (attachment == null || filename == null
+                || filename.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Attachment và filename không được để trống"
+            );
+        }
+
+        String base64Content =
+                Base64.getEncoder().encodeToString(attachment);
+        Map<String, Object> requestBody = Map.of(
+                "sender", Map.of(
+                        "name", "Money Manager",
+                        "email", fromEmail
+                ),
+                "to", List.of(Map.of("email", to)),
+                "subject", subject,
+                "textContent", body,
+                "attachment", List.of(
+                        Map.of(
+                                "content", base64Content,
+                                "name", filename
+                        )
+                )
+        );
+
+        sendRequest(requestBody);
+    }
+    private void sendRequest(Map<String, Object> requestBody) {
+
+        restClient.post()
+                .uri("/smtp/email")
+                .header("api-key", apiKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(requestBody)
+                .retrieve()
+                .toBodilessEntity();
     }
 }
