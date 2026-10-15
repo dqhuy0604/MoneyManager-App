@@ -83,7 +83,7 @@ const AddIncomeForm = ({onAddIncome,categories}) => {
                     className="add-btn add-btn-fill">
                     {loading ? (
                         <>
-                        <LoaderCircle className="w-4 h-2 animate-spin"/>Đang Thêm Thu Nhập...
+                        <LoaderCircle className="w-4 h-2 animate-spin"/>Đang Thêm...
                         </>
                     ):(
                         <>

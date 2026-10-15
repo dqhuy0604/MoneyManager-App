@@ -21,6 +21,16 @@ const Filter = () => {
 
         const handleSearch = async (e) =>{
             e.preventDefault();
+
+            if (!startDate && !endDate) {
+                toast.error("Vui lòng chọn ít nhất một ngày để lọc giao dịch!");
+                return;
+            }
+
+            if (startDate && endDate && startDate > endDate) {
+                toast.error("Ngày bắt đầu không được lớn hơn ngày kết thúc!");
+                return;
+            }
             setloading(true);
             try{
                 const response = await axiosConfig.post(API_ENDPOINT.APPLY_FILTERS, {
@@ -108,7 +118,7 @@ const Filter = () => {
                             key={transaction.id}
                             title={transaction.name}
                             icon={transaction.icon}
-                            date={moment(transaction.date).format('Do MMM YYYY')}
+                            date={moment(transaction.date).format('DD/MM/YYYY')}
                             amount={transaction.amount}
                             type={type}
                             hideDeleteBtn

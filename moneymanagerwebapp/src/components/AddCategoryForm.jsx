@@ -70,7 +70,7 @@ const AddCategoryForm = ({onAddCategory, initialCategoryData, isEditing}) => {
                     className="add-btn-fill">
                     {loading ? (
                         <>
-                        <LoaderCircle className="w-4 h-4 animate-spin"/>
+                        <LoaderCircle className="w-4 h-2 animate-spin"/>
                             {isEditing ? "Đang cập nhật..." : "Đang thêm"}
                         </>
                     ) : (

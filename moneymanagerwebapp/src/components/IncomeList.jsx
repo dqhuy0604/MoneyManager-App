@@ -1,6 +1,7 @@
 import {Download, LoaderCircle, Mail} from "lucide-react";
 import TransactionInfoCard from "./TransactionInfoCard.jsx";
 import moment from "moment";
+import "moment/locale/vi";
 import {useState} from "react";
 
 const IncomeList = ({transactions,onDelete, onDownload, onEmail}) => {
@@ -59,7 +60,7 @@ const IncomeList = ({transactions,onDelete, onDownload, onEmail}) => {
                         key={income.id}
                         title={income.name}
                         icon={income.icon}
-                        date={moment(income.date).format('Do MMM YYYY')}
+                        date={moment(income.date).locale("vi").format("DD/MM/YYYY")}
                         amount={income.amount}
                         type="income"
                         onDelete={() => onDelete(income.id)}

@@ -6,9 +6,9 @@ const FinanceOverview = ({totalBalance, totalIncome, totalExpense}) =>{
     const COLORS=["#59168B", "#a0090e", "#016630"]
 
     const balanceData = [
-        {name : "Total Balance", amount: totalBalance},
-        {name : "Total Expense", amount: totalExpense},
-        {name : "Total Income", amount: totalIncome}
+        {name : "Tổng số dư", amount: totalBalance},
+        {name : "Tổng chi tiêu", amount: totalExpense},
+        {name : "Tổng thu nhập", amount: totalIncome}
     ]
     return(
         <div className="card">
@@ -18,8 +18,8 @@ const FinanceOverview = ({totalBalance, totalIncome, totalExpense}) =>{
 
             <CustomPieChart
             data = {balanceData}
-            label = "Total Balacne"
-            totalAmount={`${formatCurrency(totalBalance)}đ`}
+            label = "Tổng số dư"
+            totalAmount={`${formatCurrency(totalBalance)}`}
             colors={COLORS}
             showTextAnchor
             />

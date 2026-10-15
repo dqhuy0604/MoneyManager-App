@@ -83,7 +83,7 @@ const AddExpenseForm = ({onAddExpense,categories}) => {
                     className="add-btn add-btn-fill">
                     {loading ? (
                         <>
-                        <LoaderCircle className="w-4 h-2 animate-spin"/>Đang Thêm Chi Tiêu...
+                        <LoaderCircle className="w-4 h-2 animate-spin"/>Đang Thêm...
                         </>
                     ):(
                         <>
