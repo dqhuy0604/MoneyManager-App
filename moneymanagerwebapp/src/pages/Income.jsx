@@ -98,7 +98,7 @@ const Income = () => {
             }
         }catch (error){
             console.log("Lỗi thêm thu nhập",);
-            toast.error(error.response?.data?.message || "Failed to adding income");
+            toast.error(error.response?.data?.message || "Thêm thu nhập thất bại");
 
         }
 
@@ -111,8 +111,8 @@ const Income = () => {
              toast.success("Thu nhập đã được xóa thành công");
              fetchIncomeDetails();
          }catch(error) {
-             console.log('Error deleting income', error);
-             toast.error(error.response?. data?.message || "Failed to delete income");
+             console.log('Xóa thu nhật thất bại', error);
+             toast.error(error.response?. data?.message || "Xóa thu nhật thất bại");
          }
      }
 

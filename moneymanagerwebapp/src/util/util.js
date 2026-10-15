@@ -48,3 +48,39 @@ export const prepareIncomeLineChartData = (transactions = []) => {
     );
 };
 
+export const prepareExpenseLineChartData = (transactions = []) => {
+    if (!Array.isArray(transactions)) return [];
+
+    const groupedData = transactions.reduce((acc, transaction) => {
+        const date = transaction.date?.slice(0, 10);
+        const amount = Number(transaction.amount);
+
+        if (!date || !Number.isFinite(amount)) {
+            return acc;
+        }
+
+        if (!acc[date]) {
+            acc[date] = {
+                date,
+                amount: 0,
+                details: []
+            };
+        }
+
+        acc[date].amount += amount;
+
+        acc[date].details.push({
+            id: transaction.id,
+            name: transaction.name || "Chi tiêu",
+            categoryName: transaction.categoryName || "Khác",
+            amount
+        });
+
+        return acc;
+    }, {});
+
+    return Object.values(groupedData).sort(
+        (a, b) => a.date.localeCompare(b.date)
+    );
+};
+

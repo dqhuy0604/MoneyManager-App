@@ -60,7 +60,6 @@ const CustomTooltip = ({ active, payload }) => {
         </div>
     );
 };
-
 const CustomLineChart = ({ data = [] }) => {
     return (
         <div className="w-full h-80 min-w-0">

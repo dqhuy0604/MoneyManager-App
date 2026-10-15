@@ -24,7 +24,7 @@ const IncomeList = ({transactions,onDelete, onDownload, onEmail}) => {
     return(
         <div className="card">
             <div className="flex items-center justify-between">
-                <h5 className="text-lg">Income Sources</h5>
+                <h5 className="text-lg">Nguồn thu nhập</h5>
                 <div className=" flex items-center justify-end gap-2">
                     <button disabled={loading} className="card-btn" onClick={handleEmail}>
                         {loading ? (
